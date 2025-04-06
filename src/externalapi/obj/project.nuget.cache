@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "NQg8ux3B6Hg=",
+  "dgSpecHash": "hXWesLMU0us=",
   "success": true,
   "projectFilePath": "/Users/seanrafferty/Documents/development/repos/pubsubbing/src/externalapi/externalapi.csproj",
   "expectedPackageFiles": [
@@ -20,6 +20,7 @@
     "/Users/seanrafferty/.nuget/packages/microsoft.extensions.primitives/9.0.0/microsoft.extensions.primitives.9.0.0.nupkg.sha512",
     "/Users/seanrafferty/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512",
     "/Users/seanrafferty/.nuget/packages/rabbitmq.client/7.1.2/rabbitmq.client.7.1.2.nupkg.sha512",
+    "/Users/seanrafferty/.nuget/packages/scalar.aspnetcore/2.1.6/scalar.aspnetcore.2.1.6.nupkg.sha512",
     "/Users/seanrafferty/.nuget/packages/system.io.pipelines/8.0.0/system.io.pipelines.8.0.0.nupkg.sha512",
     "/Users/seanrafferty/.nuget/packages/system.threading.ratelimiting/8.0.0/system.threading.ratelimiting.8.0.0.nupkg.sha512"
   ],

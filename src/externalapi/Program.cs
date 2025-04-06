@@ -1,4 +1,5 @@
 using MassTransit;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddMassTransit(x =>
 
         cfg.ConfigureEndpoints(context);
     });
+    //x.AddConsumer<MyMessageConsumer>();
 });
 
 var app = builder.Build();
@@ -27,6 +29,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
@@ -36,6 +39,11 @@ app.MapGet("/", () => "Hello World!");
 app.MapPost("/sendmessage", async (QueueSenderService sender, string message) =>
 {
     var result = await sender.SendMessage(message);
+    if (!result)
+    {
+        return Results.BadRequest("Failed to send message.");
+    }
+    Console.WriteLine($"Message sent: {message}");
     return Results.Ok(result);
 });
 
