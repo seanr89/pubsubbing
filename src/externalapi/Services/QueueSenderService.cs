@@ -16,7 +16,6 @@ public class QueueSenderService
     public async Task<bool> SendMessage(string message)
     {
         // Logic to send a message to the queue
-        Console.WriteLine($"Message sent: {message}");
         MyMessage myMessage = new(message, DateTime.UtcNow);
         await _bus.Publish(myMessage);
         _logger.LogInformation("Published message: {Text}", myMessage.Text);

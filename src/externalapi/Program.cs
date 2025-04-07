@@ -20,7 +20,7 @@ builder.Services.AddMassTransit(x =>
 
         cfg.ConfigureEndpoints(context);
     });
-    //x.AddConsumer<MyMessageConsumer>();
+    x.AddConsumer<MyMessageConsumer>();
 });
 
 var app = builder.Build();
@@ -32,9 +32,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseHttpsRedirection();
-
-app.MapGet("/", () => "Hello World!");
+//app.UseHttpsRedirection();
 
 app.MapPost("/sendmessage", async (QueueSenderService sender, string message) =>
 {
