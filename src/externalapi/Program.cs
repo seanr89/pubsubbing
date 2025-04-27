@@ -20,7 +20,9 @@ builder.Services.AddMassTransit(x =>
 
         cfg.ConfigureEndpoints(context);
     });
+    //Consumers basically handle Topics via the bus and object type!
     x.AddConsumer<MyMessageConsumer>();
+    x.AddConsumer<EventConsumer>();
 });
 
 var app = builder.Build();
@@ -43,6 +45,12 @@ app.MapPost("/sendmessage", async (QueueSenderService sender, string message) =>
     }
     Console.WriteLine($"Message sent: {message}");
     return Results.Ok(result);
+});
+
+app.MapPost("/pushToAnotherQueue", async (QueueSenderService sender, string content, string userName) =>
+{
+    await sender.PushToAnotherQueue(content, userName);
+    return Results.Ok("Message sent to another queue.");
 });
 
 app.Run();

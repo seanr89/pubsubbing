@@ -2,15 +2,15 @@ using ExternalApi.Contracts;
 using MassTransit;
 
 /// <summary>
-/// Consumer class for handling messages of type MyMessage.
+/// Consumer class for handling messages of type MyEvent.
 /// This class implements the IConsumer interface from MassTransit.
 /// It is responsible for processing messages received from the message bus.
 /// </summary>
-public class MyMessageConsumer : IConsumer<MyMessage>
+public class EventConsumer : IConsumer<MyEvent>
 {
-    private readonly ILogger<MyMessageConsumer> _logger;
+    private readonly ILogger<EventConsumer> _logger;
 
-    public MyMessageConsumer(ILogger<MyMessageConsumer> logger)
+    public EventConsumer(ILogger<EventConsumer> logger)
     {
         _logger = logger;
     }
@@ -23,9 +23,9 @@ public class MyMessageConsumer : IConsumer<MyMessage>
     /// </summary>
     /// <param name="context"></param>
     /// <returns></returns>
-    public async Task Consume(ConsumeContext<MyMessage> context)
+    public async Task Consume(ConsumeContext<MyEvent> context)
     {
-        _logger.LogInformation("Received message: {Text} at {Timestamp}", context.Message.Text, context.Message.Timestamp);
+        _logger.LogInformation("Received message: {Text} for {UserName} at {Timestamp}", context.Message.Content, context.Message.UserName, context.Message.Timestamp);
         await Task.CompletedTask;
     }
 

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("externalapi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6f386e7747c4590e79c29f924d7481e4e9b27bb8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cdd00896639a2d85f40f2e3cbd47fcb09671b6d3")]
 [assembly: System.Reflection.AssemblyProductAttribute("externalapi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("externalapi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
