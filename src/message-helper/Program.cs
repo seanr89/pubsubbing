@@ -44,17 +44,17 @@ namespace RabbitMqEventSender
                     Port = RabbitMqPort,
                     UserName = RabbitMqUserName,
                     Password = RabbitMqPassword,
-                    DispatchConsumersAsync = true // For async consumers, not strictly needed for producer
+                    //DispatchConsumersAsync = true // For async consumers, not strictly needed for producer
                 };
 
                 // Establish a connection and create a channel
                 // using statement ensures proper disposal of connection and channel
-                using var connection = factory.CreateConnection();
-                using var channel = connection.CreateModel();
+                using var connection = await factory.CreateConnectionAsync();
+                using var channel = await connection.CreateChannelAsync();
 
                 // Declare the queue
                 // This is idempotent; the queue will be created only if it doesn't exist
-                channel.QueueDeclare(queue: QueueName,
+                await channel.QueueDeclareAsync(queue: QueueName,
                                      durable: false,    // Queue survives broker restarts (set to true for persistent messages)
                                      exclusive: false,  // Used by only one connection and deleted when that connection closes
                                      autoDelete: false, // Queue is deleted when last consumer unsubscribes
@@ -82,11 +82,19 @@ namespace RabbitMqEventSender
                         string jsonMessage = JsonSerializer.Serialize(eventMessage);
                         var body = Encoding.UTF8.GetBytes(jsonMessage);
 
+                        var props = new BasicProperties();
+                        props.ContentType = "text/plain";
+                        props.DeliveryMode = DeliveryModes.Persistent;
+                        props.Expiration = "36000000";
+
                         // Publish the message to the queue
-                        channel.BasicPublish(exchange: "", // Use the default direct exchange
-                                             routingKey: QueueName,
-                                             basicProperties: null, // No specific properties needed for this simple example
-                                             body: body);
+                        await channel.BasicPublishAsync(
+                            "", // Use the default direct exchange
+                            QueueName,
+                            false,
+                            props,
+                            body
+                        );
 
                         Console.WriteLine($" [x] Sent event: '{eventMessage.EventId}' at {eventMessage.Timestamp.ToLocalTime()}");
                     }
@@ -128,8 +136,8 @@ namespace RabbitMqEventSender
     // A simple class to represent our event data
     public class MyServiceEvent
     {
-        public string EventId { get; set; }
+        public required string EventId { get; set; }
         public DateTimeOffset Timestamp { get; set; }
-        public string Message { get; set; }
+        public required string Message { get; set; }
     }
 }
