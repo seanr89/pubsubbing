@@ -2,6 +2,12 @@
 using ExternalApi.Contracts;
 using MassTransit;
 
+/// <summary>
+/// QueueSenderService is responsible for sending messages to a message queue.
+/// It uses MassTransit to publish messages to the message bus.
+/// This service is typically used to decouple components in a distributed system,
+/// allowing for asynchronous communication between different parts of the application.
+/// </summary>
 public class QueueSenderService
 {
     private readonly IBus _bus;
@@ -28,6 +34,13 @@ public class QueueSenderService
         return true;
     }
 
+    /// <summary>
+    /// PushToAnotherQueue sends a message to another queue.
+    /// This method is used to publish messages to a different queue, allowing for further processing or handling.
+    /// </summary>
+    /// <param name="content"></param>
+    /// <param name="userName"></param>
+    /// <returns></returns>
     public async Task PushToAnotherQueue(string content, string userName)
     {
         // Logic to send a message to another queue
