@@ -1,4 +1,4 @@
-using rabbbitapi;
+using rabbitapi;
 
 var builder = WebApplication.CreateBuilder(args);
 
