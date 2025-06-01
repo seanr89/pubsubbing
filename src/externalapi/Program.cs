@@ -10,19 +10,29 @@ builder.Services.AddTransient<QueueSenderService>();
 
 builder.Services.AddMassTransit(x =>
 {
-    // elided...
-    x.UsingRabbitMq((context,cfg) =>
+    x.AddConsumer<MyMessageConsumer>();
+    x.AddConsumer<EventConsumer>();
+    x.AddConsumer<ExternalEventConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("localhost", "/", h => {
+        cfg.Host("localhost", "/", h =>
+        {
             h.Username("guest");
             h.Password("guest");
         });
 
+        // Bind ExternalEventConsumer to the specific queue name
+        cfg.ReceiveEndpoint("long_lived_service_events", e =>
+        {
+            Console.WriteLine("Configuring long_lived_service_events endpoint...");
+            e.ConfigureConsumer<ExternalEventConsumer>(context);
+            e.DiscardSkippedMessages();
+        });
+
         cfg.ConfigureEndpoints(context);
     });
-    //Consumers basically handle Topics via the bus and object type!
-    x.AddConsumer<MyMessageConsumer>();
-    x.AddConsumer<EventConsumer>();
+
 });
 
 var app = builder.Build();

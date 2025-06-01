@@ -20,3 +20,7 @@ run-masstransit: ## Run the MassTransit consumer
 run-masstransit-arm: ## Run the MassTransit consumer on ARM64
 	docker run --platform linux/arm64 -p 15672:15672 -p 5672:5672 masstransit/rabbitmq
 
+run-local-rabbit: ## Run RabbitMQ locally
+	@echo "Running RabbitMQ locally"
+	docker run -d --hostname my-rabbitmq-server --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+

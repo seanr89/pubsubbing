@@ -25,9 +25,8 @@ public class EventConsumer : IConsumer<MyEvent>
     /// <returns></returns>
     public async Task Consume(ConsumeContext<MyEvent> context)
     {
-        _logger.LogInformation("Received message: {Text} for {UserName} at {Timestamp}", context.Message.Content, context.Message.UserName, context.Message.Timestamp);
+        _logger.LogInformation("Event Received: {Text} for {UserName} at {Timestamp}", context.Message.Content, context.Message.UserName, context.Message.Timestamp);
         await Task.CompletedTask;
     }
 
-    
 }

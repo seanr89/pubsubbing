@@ -25,7 +25,7 @@ public class MyMessageConsumer : IConsumer<MyMessage>
     /// <returns></returns>
     public async Task Consume(ConsumeContext<MyMessage> context)
     {
-        _logger.LogInformation("Received message: {Text} at {Timestamp}", context.Message.Text, context.Message.Timestamp);
+        _logger.LogInformation("MyMessage Received: {Text} at {Timestamp}", context.Message.Text, context.Message.Timestamp);
         await Task.CompletedTask;
     }
 

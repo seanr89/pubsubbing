@@ -55,7 +55,7 @@ namespace RabbitMqEventSender
                 // Declare the queue
                 // This is idempotent; the queue will be created only if it doesn't exist
                 await channel.QueueDeclareAsync(queue: QueueName,
-                                     durable: false,    // Queue survives broker restarts (set to true for persistent messages)
+                                     durable: true,    // Queue survives broker restarts (set to true for persistent messages)
                                      exclusive: false,  // Used by only one connection and deleted when that connection closes
                                      autoDelete: false, // Queue is deleted when last consumer unsubscribes
                                      arguments: null);
@@ -83,9 +83,9 @@ namespace RabbitMqEventSender
                         var body = Encoding.UTF8.GetBytes(jsonMessage);
 
                         var props = new BasicProperties();
-                        props.ContentType = "text/plain";
-                        props.DeliveryMode = DeliveryModes.Persistent;
-                        props.Expiration = "36000000";
+                        props.ContentType = "application/json";
+                        props.DeliveryMode = DeliveryModes.Transient;
+                        props.Expiration = null;
 
                         // Publish the message to the queue
                         await channel.BasicPublishAsync(
@@ -96,6 +96,7 @@ namespace RabbitMqEventSender
                             body
                         );
 
+                        
                         Console.WriteLine($" [x] Sent event: '{eventMessage.EventId}' at {eventMessage.Timestamp.ToLocalTime()}");
                     }
                     catch (Exception ex)
