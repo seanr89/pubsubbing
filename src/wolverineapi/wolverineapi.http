@@ -1,0 +1,6 @@
+@wolverineapi_HostAddress = http://localhost:5038
+
+GET {{wolverineapi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,6 +1,0 @@
-@externalapi_HostAddress = http://localhost:5090
-
-GET {{externalapi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

@@ -18,7 +18,7 @@ namespace RabbitMqEventSender
         private const string QueueName = "long_lived_service_events";
 
         // --- Service Configuration ---
-        private static readonly TimeSpan SendInterval = TimeSpan.FromSeconds(5); // Send an event every 5 seconds
+        private static readonly TimeSpan SendInterval = TimeSpan.FromSeconds(2); // Send an event every 2 seconds
 
         public static async Task Main(string[] args)
         {
@@ -52,13 +52,19 @@ namespace RabbitMqEventSender
                 using var connection = await factory.CreateConnectionAsync();
                 using var channel = await connection.CreateChannelAsync();
 
+                Console.WriteLine($"Declaring queue '{QueueName}' on RabbitMQ server at {RabbitMqHostName}:{RabbitMqPort}...");
+
+                var argsum = new Dictionary<string, object>
+                {
+                    { "x-dead-letter-exchange", "incoming-errors" }     // Optional: Limit the queue to 1000 messages
+                };
                 // Declare the queue
                 // This is idempotent; the queue will be created only if it doesn't exist
                 await channel.QueueDeclareAsync(queue: QueueName,
                                      durable: true,    // Queue survives broker restarts (set to true for persistent messages)
                                      exclusive: false,  // Used by only one connection and deleted when that connection closes
                                      autoDelete: false, // Queue is deleted when last consumer unsubscribes
-                                     arguments: null);
+                                     arguments: argsum);
 
                 Console.WriteLine($"Connected to RabbitMQ. Sending events to queue: '{QueueName}' every {SendInterval.TotalSeconds} seconds.");
                 Console.WriteLine("Press Ctrl+C to stop the service.");
@@ -83,9 +89,10 @@ namespace RabbitMqEventSender
                         var body = Encoding.UTF8.GetBytes(jsonMessage);
 
                         var props = new BasicProperties();
-                        props.ContentType = "application/json";
-                        props.DeliveryMode = DeliveryModes.Transient;
+                        props.ContentType = "text/plain"; // Set content type to text/plain
+                        props.DeliveryMode = DeliveryModes.Transient; // Ensure messages are transient
                         props.Expiration = null;
+
 
                         // Publish the message to the queue
                         await channel.BasicPublishAsync(
